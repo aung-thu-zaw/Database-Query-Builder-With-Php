@@ -32,14 +32,22 @@ class DB
 
     public static function table($tableName)
     {
-
-        self::$sql="select * from $tableName;";
+        self::$sql="select * from $tableName";
 
         $db= new DB();
 
         $db->query(self::$sql);
 
         return $db;
+    }
+
+    public function orderBy($column, $direction)
+    {
+        self::$sql.=" order by $column $direction";
+
+        $this->query(self::$sql);
+
+        return $this;
     }
 
     public function get()
@@ -59,7 +67,7 @@ class DB
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
-$user=DB::table("users")->get();
+$user=DB::table("users")->orderBy("id", "desc")->get();
 
 echo "<pre/>";
 print_r($user);
