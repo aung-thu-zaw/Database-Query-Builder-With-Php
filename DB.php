@@ -352,6 +352,29 @@ class DB
         return self::$dbh->lastInsertId();
     }
 
+    public function insertOrIgnore($data)
+    {
+        $table=self::$tableName;
+
+        $columns=implode(",", array_keys($data));
+
+        $values=array_values($data);
+
+        $questionMarkValues="";
+
+        foreach($data as $value) {
+            $questionMarkValues.="?,";
+        }
+
+        $questionMarkValues = rtrim(str_repeat("?,", count($data)), ",");
+
+        self::$sql="insert ignore into $table ($columns) values ($questionMarkValues)";
+
+        $this->query($values);
+
+        return self::$dbh->lastInsertId();
+    }
+
     public static function update($table, $data, $id)
     {
         $db = new DB();
@@ -387,7 +410,7 @@ class DB
 
 
 
-$user = DB::table("users")->create([
+$user = DB::table("users")->insertOrIgnore([
 "name"=>"Ko Ko",
 "email"=>"koko@gmail.com",
 "password"=>"Password!",
