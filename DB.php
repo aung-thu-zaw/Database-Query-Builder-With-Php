@@ -122,6 +122,17 @@ class DB
         return $this;
     }
 
+    public function whereBetween($column, $values)
+    {
+        self::$sql.=" where $column between $values[0] and $values[1]";
+
+        $this->query();
+
+        echo self::$sql;
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -234,7 +245,7 @@ class DB
 }
 
 
-$user=DB::table("users")->select("id")->first();
+$user=DB::table("users")->whereBetween("id", [12,15])->get();
 
 
 echo "<pre/>";
