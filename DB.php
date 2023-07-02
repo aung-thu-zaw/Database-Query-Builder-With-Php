@@ -6,6 +6,7 @@ class DB
     private static $result;
     private static $data;
     private static $sql;
+    private static $tableName;
 
     public function __construct()
     {
@@ -30,6 +31,8 @@ class DB
 
     public static function table($tableName)
     {
+        self::$tableName=$tableName;
+
         self::$sql="select * from $tableName";
 
         $db= new DB();
@@ -37,6 +40,17 @@ class DB
         $db->query();
 
         return $db;
+    }
+
+    public function select(...$columns)
+    {
+        $stringColumns = implode(", ", $columns);
+
+        self::$sql = "select $stringColumns from " . self::$tableName;
+
+        $this->query();
+
+        return $this;
     }
 
     public function where($column, $operator, $value="")
@@ -217,26 +231,10 @@ class DB
 
         $db->query();
     }
-
 }
 
 
-
-// $db=new DB();
-// $user=$db->query("select * from users")->count();
-// $user=DB::table("users")
-//         ->where("id", 2)
-//         ->orWhere("id", 3)
-//         ->andWhere("email", "mgmg@gmail.com")
-//         ->orderBy("id", "desc")
-//         ->get();
-
-
-$user=DB::update("users", [
-    "name"=>"Aung Thu Zaw",
-    "email"=>"aungthuzaw@gmail.com",
-    "password"=>"Password!"
-], 12);
+$user=DB::table("users")->select("id")->first();
 
 
 echo "<pre/>";
