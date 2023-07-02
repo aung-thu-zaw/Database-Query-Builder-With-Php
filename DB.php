@@ -164,6 +164,17 @@ class DB
         return $this;
     }
 
+    public function whereMonth($column, $value)
+    {
+        self::$sql .= " where MONTH($column) = $value";
+
+        $this->query();
+
+        echo self::$sql;
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -276,7 +287,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereNotIn("id", [15,16,17,18,19,20])->get();
+$user=DB::table("users")->whereMonth("created_at", "1")->get();
 
 
 echo "<pre/>";
