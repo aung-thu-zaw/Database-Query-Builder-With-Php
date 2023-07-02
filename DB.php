@@ -274,6 +274,15 @@ class DB
         return $this;
     }
 
+    public function take($limit)
+    {
+        self::$sql .= " limit $limit";
+
+        $this->query();
+
+        return $this;
+    }
+
     public function get()
     {
         self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
@@ -377,8 +386,8 @@ class DB
 }
 
 
-$user=DB::table("users")->inRandomOrder()->get();
 
+$user = DB::table("users")->take(2)->get();
 
 echo "<pre/>";
 print_r($user);
