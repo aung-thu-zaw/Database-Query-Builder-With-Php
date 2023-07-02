@@ -256,6 +256,15 @@ class DB
         return $this;
     }
 
+    public function latest()
+    {
+        self::$sql.=" order by created_at desc";
+
+        $this->query();
+
+        return $this;
+    }
+
     public function get()
     {
         self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
@@ -359,7 +368,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereTime("created_at", "<", "09:11:24")->get();
+$user=DB::table("users")->latest()->get();
 
 
 echo "<pre/>";
