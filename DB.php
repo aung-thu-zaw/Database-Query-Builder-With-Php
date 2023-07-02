@@ -186,6 +186,29 @@ class DB
         return self::$dbh->lastInsertId();
     }
 
+    public static function update($table, $data, $id)
+    {
+        $db = new DB();
+
+        $columns = "";
+
+        $values=array_values($data);
+
+        foreach ($data as $key => $value) {
+            $columns .= "$key=?,";
+        }
+
+        $columns = rtrim($columns, ",");
+
+        self::$sql="update $table set $columns where id=$id";
+
+        $db->query($values);
+
+        $updatedRow=DB::table($table)->findOrFail($id);
+
+        return $updatedRow;
+    }
+
     public static function delete($table, $id)
     {
         $db=new DB();
@@ -209,7 +232,12 @@ class DB
 //         ->get();
 
 
-$user=DB::delete("users", 11);
+$user=DB::update("users", [
+    "name"=>"Aung Thu Zaw",
+    "email"=>"aungthuzaw@gmail.com",
+    "password"=>"Password!"
+], 12);
 
 
-echo $user;
+echo "<pre/>";
+print_r($user);
