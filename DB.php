@@ -265,6 +265,15 @@ class DB
         return $this;
     }
 
+    public function inRandomOrder()
+    {
+        self::$sql.=" order by RAND()";
+
+        $this->query();
+
+        return $this;
+    }
+
     public function get()
     {
         self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
@@ -368,7 +377,7 @@ class DB
 }
 
 
-$user=DB::table("users")->latest()->get();
+$user=DB::table("users")->inRandomOrder()->get();
 
 
 echo "<pre/>";
