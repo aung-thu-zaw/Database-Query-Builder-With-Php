@@ -179,6 +179,23 @@ class DB
         return $this;
     }
 
+    public function whereTime($column, $operator, $value="")
+    {
+        if(func_num_args()===3) {
+
+            self::$sql .= " where TIME($column) $operator '$value'";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql .= " where TIME($column) = '$operator'";
+
+        }
+
+        $this->query();
+
+        return $this;
+    }
+
     public function whereDay($column, $operator, $value="")
     {
         if(func_num_args()===3) {
@@ -342,7 +359,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereYear("created_at", "2019")->get();
+$user=DB::table("users")->whereTime("created_at", "<", "09:11:24")->get();
 
 
 echo "<pre/>";
