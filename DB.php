@@ -128,14 +128,23 @@ class DB
 
         $this->query();
 
-        echo self::$sql;
-
         return $this;
     }
 
     public function whereNotBetween($column, $values)
     {
         self::$sql.=" where $column not between $values[0] and $values[1]";
+
+        $this->query();
+
+        return $this;
+    }
+
+    public function whereIn($column, $values)
+    {
+        $stringValues=implode(",", $values);
+
+        self::$sql.=" where $column in ($stringValues)";
 
         $this->query();
 
@@ -256,7 +265,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereNotBetween("id", [16,18])->get();
+$user=DB::table("users")->whereIn("id", [15,16,17,18,19,20])->get();
 
 
 echo "<pre/>";
