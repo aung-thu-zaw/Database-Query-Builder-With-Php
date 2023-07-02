@@ -148,7 +148,23 @@ class DB
         return self::$data;
     }
 
+    public function findOrFail($id)
+    {
+        self::$sql.=" where id=$id";
+
+        $this->query(self::$sql);
+
+        self::$data = self::$result->fetch(PDO::FETCH_OBJ);
+
+        if (!self::$data) {
+            throw new Exception("Record not found.");
+        }
+
+        return self::$data;
+    }
 }
+
+
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
@@ -159,7 +175,7 @@ class DB
 //         ->orderBy("id", "desc")
 //         ->get();
 $user=DB::table("users")
-        ->find(2);
+        ->findOrFail(20);
 
 echo "<pre/>";
 print_r($user);
