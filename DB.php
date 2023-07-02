@@ -349,7 +349,11 @@ class DB
 
         $this->query($values);
 
-        return self::$dbh->lastInsertId();
+        $id=self::$dbh->lastInsertId();
+
+        $data=DB::table($table)->findOrFail($id);
+
+        return $data;
     }
 
     public function insertOrIgnore($data)
@@ -372,7 +376,19 @@ class DB
 
         $this->query($values);
 
-        return self::$dbh->lastInsertId();
+        $id=self::$dbh->lastInsertId();
+
+        if($id) {
+
+            $data=DB::table($table)->findOrFail($id);
+
+            return $data;
+        } else {
+
+            return 0;
+
+        }
+
     }
 
     public function insertGetId($data)
@@ -433,9 +449,9 @@ class DB
 
 
 
-$user = DB::table("users")->insertGetId([
-"name"=>"Ko dKo",
-"email"=>"kokdo@gmail.com",
+$user = DB::table("users")->insertOrIgnore([
+"name"=>"Ko Ko Maung",
+"email"=>"kokomaung@gmail.com",
 "password"=>"Password!",
 "created_at"=>"2019-09-01 10:09:24",
 "updated_at"=>"2019-09-01 10:09:24",
