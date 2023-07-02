@@ -35,12 +35,18 @@ class DB
         return self::$data;
     }
 
+
+    public function count()
+    {
+        return count(self::$data);
+    }
+
 }
 
 
 $db=new DB();
 
-$user=$db->query("select * from users")->get();
+$user=$db->query("select * from users")->count();
 
 echo "<pre/>";
 print_r($user);
