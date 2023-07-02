@@ -186,6 +186,15 @@ class DB
         return self::$dbh->lastInsertId();
     }
 
+    public static function delete($table, $id)
+    {
+        $db=new DB();
+
+        self::$sql="delete from $table where id=$id";
+
+        $db->query();
+    }
+
 }
 
 
@@ -200,13 +209,7 @@ class DB
 //         ->get();
 
 
-$user=DB::create("users", [
-"name"=>"Aung Thu Zaw",
-"email"=>"aungthuzaw@gmail.com",
-"password"=>"Password!",
-"created_at"=>"2023-07-02 12:13:42",
-"updated_at"=>"2023-07-02 12:13:42",
-]);
+$user=DB::delete("users", 11);
 
 
 echo $user;
