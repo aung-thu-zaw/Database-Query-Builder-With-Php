@@ -19,11 +19,11 @@ class DB
         }
     }
 
-    public function query($sql)
+    public function query($values=[])
     {
-        self::$result=self::$dbh->prepare($sql);
+        self::$result=self::$dbh->prepare(self::$sql);
 
-        self::$result->execute();
+        self::$result->execute($values);
 
         return $this;
     }
@@ -34,7 +34,7 @@ class DB
 
         $db= new DB();
 
-        $db->query(self::$sql);
+        $db->query();
 
         return $db;
     }
@@ -51,7 +51,7 @@ class DB
 
         }
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -68,7 +68,7 @@ class DB
 
         }
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -85,7 +85,7 @@ class DB
 
         }
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -94,7 +94,7 @@ class DB
     {
         self::$sql.=" where $column is null";
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -103,7 +103,7 @@ class DB
     {
         self::$sql.=" where $column is not null";
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -112,7 +112,7 @@ class DB
     {
         self::$sql.=" order by $column $direction";
 
-        $this->query(self::$sql);
+        $this->query();
 
         return $this;
     }
@@ -141,7 +141,7 @@ class DB
     {
         self::$sql.=" where id=$id";
 
-        $this->query(self::$sql);
+        $this->query();
 
         self::$data=self::$result->fetch(PDO::FETCH_OBJ);
 
@@ -152,7 +152,7 @@ class DB
     {
         self::$sql.=" where id=$id";
 
-        $this->query(self::$sql);
+        $this->query();
 
         self::$data = self::$result->fetch(PDO::FETCH_OBJ);
 
@@ -162,6 +162,30 @@ class DB
 
         return self::$data;
     }
+
+    public static function create($table, $data)
+    {
+        $db=new DB();
+
+        $columns=implode(",", array_keys($data));
+
+        $values=array_values($data);
+
+        $questionMarkValues="";
+
+        foreach($data as $value) {
+            $questionMarkValues.="?,";
+        }
+
+        $questionMarkValues = rtrim(str_repeat("?,", count($data)), ",");
+
+        self::$sql="insert into $table ($columns) values ($questionMarkValues)";
+
+        $db->query($values);
+
+        return self::$dbh->lastInsertId();
+    }
+
 }
 
 
@@ -174,8 +198,15 @@ class DB
 //         ->andWhere("email", "mgmg@gmail.com")
 //         ->orderBy("id", "desc")
 //         ->get();
-$user=DB::table("users")
-        ->findOrFail(20);
 
-echo "<pre/>";
-print_r($user);
+
+$user=DB::create("users", [
+"name"=>"Aung Thu Zaw",
+"email"=>"aungthuzaw@gmail.com",
+"password"=>"Password!",
+"created_at"=>"2023-07-02 12:13:42",
+"updated_at"=>"2023-07-02 12:13:42",
+]);
+
+
+echo $user;
