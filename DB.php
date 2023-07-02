@@ -92,6 +92,15 @@ class DB
         return $this;
     }
 
+    public function whereNull($column)
+    {
+        self::$sql.=" where $column is null";
+
+        $this->query(self::$sql);
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -118,11 +127,14 @@ class DB
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
+// $user=DB::table("users")
+//         ->where("id", 2)
+//         ->orWhere("id", 3)
+//         ->andWhere("email", "mgmg@gmail.com")
+//         ->orderBy("id", "desc")
+//         ->get();
 $user=DB::table("users")
-        ->where("id", 2)
-        ->orWhere("id", 3)
-        ->andWhere("email", "mgmg@gmail.com")
-        ->orderBy("id", "desc")
+        ->whereNull("avatar")
         ->get();
 
 echo "<pre/>";
