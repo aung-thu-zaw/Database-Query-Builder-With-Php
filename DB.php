@@ -148,6 +148,17 @@ class DB
 
         $this->query();
 
+        return $this;
+    }
+
+    public function whereNotIn($column, $values)
+    {
+        $stringValues=implode(",", $values);
+
+        self::$sql.=" where $column not in ($stringValues)";
+
+        $this->query();
+
         echo self::$sql;
 
         return $this;
@@ -265,7 +276,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereIn("id", [15,16,17,18,19,20])->get();
+$user=DB::table("users")->whereNotIn("id", [15,16,17,18,19,20])->get();
 
 
 echo "<pre/>";
