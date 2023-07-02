@@ -101,6 +101,15 @@ class DB
         return $this;
     }
 
+    public function whereNotNull($column)
+    {
+        self::$sql.=" where $column is not null";
+
+        $this->query(self::$sql);
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -134,7 +143,7 @@ class DB
 //         ->orderBy("id", "desc")
 //         ->get();
 $user=DB::table("users")
-        ->whereNull("avatar")
+        ->whereNotNull("avatar")
         ->get();
 
 echo "<pre/>";
