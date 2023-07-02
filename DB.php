@@ -41,6 +41,23 @@ class DB
         return $db;
     }
 
+    public function where($column, $operator, $value="")
+    {
+        if(func_num_args()===3) {
+
+            self::$sql.=" where $column$operator$value";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql.=" where $column=$operator";
+
+        }
+
+        $this->query(self::$sql);
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -59,15 +76,12 @@ class DB
     {
         return count(self::$data);
     }
-
-
-
 }
 
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
-$user=DB::table("users")->orderBy("id", "desc")->get();
+$user=DB::table("users")->where("id", 1)->orderBy("id", "desc")->get();
 
 echo "<pre/>";
 print_r($user);
