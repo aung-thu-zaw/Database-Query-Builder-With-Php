@@ -45,11 +45,28 @@ class DB
     {
         if(func_num_args()===3) {
 
-            self::$sql.=" where $column$operator$value";
+            self::$sql.=" where $column$operator'$value'";
 
         } elseif(func_num_args()===2) {
 
-            self::$sql.=" where $column=$operator";
+            self::$sql.=" where $column='$operator'";
+
+        }
+
+        $this->query(self::$sql);
+
+        return $this;
+    }
+
+    public function andWhere($column, $operator, $value="")
+    {
+        if(func_num_args()===3) {
+
+            self::$sql.=" and $column$operator'$value'";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql.=" and $column='$operator'";
 
         }
 
@@ -81,7 +98,11 @@ class DB
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
-$user=DB::table("users")->where("id", 1)->orderBy("id", "desc")->get();
+$user=DB::table("users")
+        ->where("id", 1)
+        ->andWhere("email", "mgmg@gmail.com")
+        ->orderBy("id", "desc")
+        ->get();
 
 echo "<pre/>";
 print_r($user);
