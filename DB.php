@@ -135,9 +135,20 @@ class DB
     {
         return count(self::$data);
     }
+
+
+    public function find($id)
+    {
+        self::$sql.=" where id=$id";
+
+        $this->query(self::$sql);
+
+        self::$data=self::$result->fetch(PDO::FETCH_OBJ);
+
+        return self::$data;
+    }
+
 }
-
-
 
 // $db=new DB();
 // $user=$db->query("select * from users")->count();
@@ -148,8 +159,7 @@ class DB
 //         ->orderBy("id", "desc")
 //         ->get();
 $user=DB::table("users")
-        ->orderBy("id", "desc")
-        ->first();
+        ->find(2);
 
 echo "<pre/>";
 print_r($user);
