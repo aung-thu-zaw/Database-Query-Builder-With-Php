@@ -162,6 +162,17 @@ class DB
         return $this;
     }
 
+    public function whereDate($column, $value)
+    {
+        self::$sql .= " where DATE($column) = '$value'";
+
+        $this->query();
+
+        echo self::$sql;
+
+        return $this;
+    }
+
     public function whereDay($column, $value)
     {
         self::$sql .= " where DAY($column) = $value";
@@ -303,7 +314,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereDay("created_at", "1")->get();
+$user=DB::table("users")->whereDate("created_at", "2023-01-10")->get();
 
 
 echo "<pre/>";
