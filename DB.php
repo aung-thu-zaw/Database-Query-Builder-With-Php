@@ -25,8 +25,6 @@ class DB
 
         self::$result->execute();
 
-        self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
-
         return $this;
     }
 
@@ -121,8 +119,15 @@ class DB
 
     public function get()
     {
+        self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
 
-        echo self::$sql;
+        return self::$data;
+    }
+
+    public function first()
+    {
+        self::$data=self::$result->fetch(PDO::FETCH_OBJ);
+
         return self::$data;
     }
 
@@ -143,8 +148,8 @@ class DB
 //         ->orderBy("id", "desc")
 //         ->get();
 $user=DB::table("users")
-        ->whereNotNull("avatar")
-        ->get();
+        ->orderBy("id", "desc")
+        ->first();
 
 echo "<pre/>";
 print_r($user);
