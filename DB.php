@@ -162,40 +162,68 @@ class DB
         return $this;
     }
 
-    public function whereDate($column, $value)
+    public function whereDate($column, $operator, $value="")
     {
-        self::$sql .= " where DATE($column) = '$value'";
+        if(func_num_args()===3) {
 
-        $this->query();
+            self::$sql .= " where DATE($column) $operator '$value'";
 
-        echo self::$sql;
+        } elseif(func_num_args()===2) {
 
-        return $this;
-    }
+            self::$sql .= " where DATE($column) = '$operator'";
 
-    public function whereDay($column, $value)
-    {
-        self::$sql .= " where DAY($column) = $value";
-
-        $this->query();
-
-        echo self::$sql;
-
-        return $this;
-    }
-
-    public function whereMonth($column, $value)
-    {
-        self::$sql .= " where MONTH($column) = $value";
+        }
 
         $this->query();
 
         return $this;
     }
 
-    public function whereYear($column, $value)
+    public function whereDay($column, $operator, $value="")
     {
-        self::$sql .= " where YEAR($column) = $value";
+        if(func_num_args()===3) {
+
+            self::$sql .= " where DAY($column) $operator $value";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql .= " where DAY($column) = $operator";
+
+        }
+
+        $this->query();
+
+        return $this;
+    }
+
+    public function whereMonth($column, $operator, $value="")
+    {
+        if(func_num_args()===3) {
+
+            self::$sql .= " where MONTH($column) $operator $value";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql .= " where MONTH($column) = $operator";
+
+        }
+
+        $this->query();
+
+        return $this;
+    }
+
+    public function whereYear($column, $operator, $value="")
+    {
+        if(func_num_args()===3) {
+
+            self::$sql .= " where YEAR($column) $operator $value";
+
+        } elseif(func_num_args()===2) {
+
+            self::$sql .= " where YEAR($column) = $operator";
+
+        }
 
         $this->query();
 
@@ -314,7 +342,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereDate("created_at", "2023-01-10")->get();
+$user=DB::table("users")->whereYear("created_at", "2019")->get();
 
 
 echo "<pre/>";
