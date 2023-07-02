@@ -445,17 +445,30 @@ class DB
 
         $db->query();
     }
+
+    public function truncate()
+    {
+        $table=self::$tableName;
+
+        self::$sql="truncate table $table";
+
+        $this->query();
+
+        return true;
+    }
 }
 
 
 
-$user = DB::table("users")->insertOrIgnore([
-"name"=>"Ko Ko Maung",
-"email"=>"kokomaung@gmail.com",
-"password"=>"Password!",
-"created_at"=>"2019-09-01 10:09:24",
-"updated_at"=>"2019-09-01 10:09:24",
-]);
+// $user = DB::table("users")->insertOrIgnore([
+// "name"=>"Ksadfsafo dfddfKo Mfffaung",
+// "email"=>"kodsdfsdafadkomaung@gmail.com",
+// "password"=>"Password!",
+// "created_at"=>"2019-09-01 10:09:24",
+// "updated_at"=>"2019-09-01 10:09:24",
+// ]);
+
+$user=DB::table("users")->truncate();
 
 echo "<pre/>";
 print_r($user);
