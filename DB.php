@@ -329,9 +329,9 @@ class DB
         return self::$data;
     }
 
-    public static function create($table, $data)
+    public function insert($data)
     {
-        $db=new DB();
+        $table=self::$tableName;
 
         $columns=implode(",", array_keys($data));
 
@@ -347,7 +347,7 @@ class DB
 
         self::$sql="insert into $table ($columns) values ($questionMarkValues)";
 
-        $db->query($values);
+        $this->query($values);
 
         return self::$dbh->lastInsertId();
     }
@@ -387,7 +387,13 @@ class DB
 
 
 
-$user = DB::table("users")->take(2)->get();
+$user = DB::table("users")->create([
+"name"=>"Ko Ko",
+"email"=>"koko@gmail.com",
+"password"=>"Password!",
+"created_at"=>"2019-09-01 10:09:24",
+"updated_at"=>"2019-09-01 10:09:24",
+]);
 
 echo "<pre/>";
 print_r($user);
