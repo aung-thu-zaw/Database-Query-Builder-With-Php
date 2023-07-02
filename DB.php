@@ -133,6 +133,17 @@ class DB
         return $this;
     }
 
+    public function whereNotBetween($column, $values)
+    {
+        self::$sql.=" where $column not between $values[0] and $values[1]";
+
+        $this->query();
+
+        echo self::$sql;
+
+        return $this;
+    }
+
     public function orderBy($column, $direction)
     {
         self::$sql.=" order by $column $direction";
@@ -245,7 +256,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereBetween("id", [12,15])->get();
+$user=DB::table("users")->whereNotBetween("id", [16,18])->get();
 
 
 echo "<pre/>";
