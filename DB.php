@@ -159,14 +159,21 @@ class DB
 
         $this->query();
 
-        echo self::$sql;
-
         return $this;
     }
 
     public function whereMonth($column, $value)
     {
         self::$sql .= " where MONTH($column) = $value";
+
+        $this->query();
+
+        return $this;
+    }
+
+    public function whereYear($column, $value)
+    {
+        self::$sql .= " where YEAR($column) = $value";
 
         $this->query();
 
@@ -287,7 +294,7 @@ class DB
 }
 
 
-$user=DB::table("users")->whereMonth("created_at", "1")->get();
+$user=DB::table("users")->whereYear("created_at", "2023")->get();
 
 
 echo "<pre/>";
