@@ -375,6 +375,29 @@ class DB
         return self::$dbh->lastInsertId();
     }
 
+    public function insertGetId($data)
+    {
+        $table=self::$tableName;
+
+        $columns=implode(",", array_keys($data));
+
+        $values=array_values($data);
+
+        $questionMarkValues="";
+
+        foreach($data as $value) {
+            $questionMarkValues.="?,";
+        }
+
+        $questionMarkValues = rtrim(str_repeat("?,", count($data)), ",");
+
+        self::$sql="insert into $table ($columns) values ($questionMarkValues)";
+
+        $this->query($values);
+
+        return self::$dbh->lastInsertId();
+    }
+
     public static function update($table, $data, $id)
     {
         $db = new DB();
@@ -410,9 +433,9 @@ class DB
 
 
 
-$user = DB::table("users")->insertOrIgnore([
-"name"=>"Ko Ko",
-"email"=>"koko@gmail.com",
+$user = DB::table("users")->insertGetId([
+"name"=>"Ko dKo",
+"email"=>"kokdo@gmail.com",
 "password"=>"Password!",
 "created_at"=>"2019-09-01 10:09:24",
 "updated_at"=>"2019-09-01 10:09:24",
