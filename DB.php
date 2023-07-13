@@ -459,28 +459,45 @@ class DB
 
     public function paginate($per_page)
     {
-        $page_no=null;
+        $page_no = isset($_GET["page"]) ? $_GET["page"] : 1;
 
-        if(isset($_GET["page"])&& $_GET["page"] < 1) {
-            $page_no=1;
-        } elseif(isset($_GET["page"])) {
-            $page_no=$_GET["page"];
-        } elseif(!isset($_GET["page"])) {
-            $page_no=1;
+        // Total Data Count
+        $this->query();
+        $count = self::$result->rowCount();
+
+        // Calculate Total Pages
+        $total_pages = ceil($count / $per_page);
+
+        // Validate Current Page
+        if ($page_no < 1) {
+            $page_no = 1;
+        } elseif ($page_no > $total_pages) {
+            $page_no = $total_pages;
         }
 
-        $index=($page_no-1)*$per_page;
-
-        self::$sql.= " limit $index,$per_page";
-
-        echo self::$sql;
-
+        // Paginate Data
+        $index = ($page_no - 1) * $per_page;
+        self::$sql .= " limit $index, $per_page";
         $this->query();
+        self::$data = self::$result->fetchAll(PDO::FETCH_OBJ);
 
-        self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
+        // Prev Page
+        $prev_page = "page=" . ($page_no - 1);
 
-        return self::$data;
+        // Next Page
+        $next_page = "page=" . ($page_no + 1);
+
+        // Formatted Return Paginate Data
+        return [
+            "next_page" => $next_page,
+            "prev_page" => $prev_page,
+            "data" => self::$data,
+            "total" => $count,
+            "current_page" => $page_no,
+            "total_page" => $total_pages
+        ];
     }
+
 }
 
 
@@ -493,7 +510,7 @@ class DB
 // "updated_at"=>"2019-09-01 10:09:24",
 // ]);
 
-$user=DB::table("users")->paginate(2);
+$user=DB::table("users")->paginate(5);
 
 echo "<pre/>";
-var_dump($user);
+print_r($user);
