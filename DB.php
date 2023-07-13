@@ -498,6 +498,18 @@ class DB
         ];
     }
 
+    public static function raw($query)
+    {
+        $db=new DB();
+
+        self::$sql=$query;
+
+        $db->query();
+
+        return $db;
+
+    }
+
 }
 
 
@@ -510,7 +522,6 @@ class DB
 // "updated_at"=>"2019-09-01 10:09:24",
 // ]);
 
-$user=DB::table("users")->paginate(5);
-
+$user=DB::raw("select * from users")->paginate(4);
 echo "<pre/>";
 print_r($user);
