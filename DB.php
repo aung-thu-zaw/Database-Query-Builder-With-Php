@@ -456,6 +456,31 @@ class DB
 
         return true;
     }
+
+    public function paginate($per_page)
+    {
+        $page_no=null;
+
+        if(isset($_GET["page"])&& $_GET["page"] < 1) {
+            $page_no=1;
+        } elseif(isset($_GET["page"])) {
+            $page_no=$_GET["page"];
+        } elseif(!isset($_GET["page"])) {
+            $page_no=1;
+        }
+
+        $index=($page_no-1)*$per_page;
+
+        self::$sql.= " limit $index,$per_page";
+
+        echo self::$sql;
+
+        $this->query();
+
+        self::$data=self::$result->fetchAll(PDO::FETCH_OBJ);
+
+        return self::$data;
+    }
 }
 
 
@@ -468,7 +493,7 @@ class DB
 // "updated_at"=>"2019-09-01 10:09:24",
 // ]);
 
-$user=DB::table("users")->truncate();
+$user=DB::table("users")->paginate(2);
 
 echo "<pre/>";
-print_r($user);
+var_dump($user);
